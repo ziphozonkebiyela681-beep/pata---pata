@@ -1,20 +1,34 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { PataPataLogo } from './PataPataLogo';
 import { PataPataImages } from '../assets/images';
-import { Calendar, UtensilsCrossed, Music, MapPin, Sparkles, Clock, ArrowDown } from 'lucide-react';
+import { Phone, UtensilsCrossed, Music, MapPin, Sparkles, Clock, ArrowDown } from 'lucide-react';
 import { RESTAURANT_INFO } from '../data/restaurantData';
+import { loadStoredHeroImage } from '../utils/photoStorage';
 
 interface HeroSectionProps {
-  onOpenReservation: () => void;
+  heroImageVersion?: number;
 }
 
-export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenReservation }) => {
+export const HeroSection: React.FC<HeroSectionProps> = ({ 
+  heroImageVersion = 0,
+}) => {
+  const [heroSrc, setHeroSrc] = useState<string>(PataPataImages.hero);
+
+  useEffect(() => {
+    const customHero = loadStoredHeroImage();
+    if (customHero) {
+      setHeroSrc(customHero);
+    } else {
+      setHeroSrc(PataPataImages.hero);
+    }
+  }, [heroImageVersion]);
+
   return (
     <section className="relative min-h-[92vh] flex items-center justify-center pt-24 pb-16 overflow-hidden">
       {/* Background Photography with Warm Atmospheric Gradient */}
       <div className="absolute inset-0 z-0">
         <img
-          src={PataPataImages.hero}
+          src={heroSrc}
           alt="Pata Pata restaurant outdoor sidewalk dining on Fox Street Maboneng at twilight"
           className="w-full h-full object-cover object-center scale-105 transition-transform duration-1000 ease-out"
         />
@@ -51,13 +65,13 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenReservation }) =
 
         {/* Primary Action Buttons */}
         <div className="flex flex-wrap items-center justify-center gap-3.5 w-full max-w-md mb-10">
-          <button
-            onClick={onOpenReservation}
-            className="flex-1 min-w-[160px] flex items-center justify-center gap-2 px-6 py-3.5 text-sm sm:text-base font-semibold text-white bg-gradient-to-r from-[#c2410c] to-[#e67329] hover:from-[#b91c1c] hover:to-[#d97706] rounded-xl shadow-lg hover:shadow-[#e67329]/25 transition-all transform hover:-translate-y-0.5"
+          <a
+            href={`tel:${RESTAURANT_INFO.phone}`}
+            className="flex-1 min-w-[160px] flex items-center justify-center gap-2 px-6 py-3.5 text-sm sm:text-base font-bold text-white bg-gradient-to-r from-[#c2410c] to-[#e67329] hover:from-[#b91c1c] hover:to-[#d97706] rounded-xl shadow-lg hover:shadow-[#e67329]/25 transition-all transform hover:-translate-y-0.5"
           >
-            <Calendar className="w-4 h-4" />
-            <span>Book a Table</span>
-          </button>
+            <Phone className="w-4 h-4" />
+            <span>Call {RESTAURANT_INFO.phone}</span>
+          </a>
 
           <a
             href="#menu"

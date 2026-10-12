@@ -1,19 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { PataPataLogo } from './PataPataLogo';
-import { Phone, Calendar, Menu as MenuIcon, X, MapPin, Music, UtensilsCrossed, Clock, Receipt } from 'lucide-react';
+import { Phone, Menu as MenuIcon, X, MapPin, Music, UtensilsCrossed, Clock } from 'lucide-react';
 import { RESTAURANT_INFO } from '../data/restaurantData';
 
-interface NavbarProps {
-  onOpenReservation: () => void;
-  onOpenBillEstimator: () => void;
-  cartCount: number;
-}
+interface NavbarProps {}
 
-export const Navbar: React.FC<NavbarProps> = ({
-  onOpenReservation,
-  onOpenBillEstimator,
-  cartCount,
-}) => {
+export const Navbar: React.FC<NavbarProps> = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -64,9 +56,9 @@ export const Navbar: React.FC<NavbarProps> = ({
               <span className="text-[#64594c]">|</span>
               <a
                 href={`tel:${RESTAURANT_INFO.phone}`}
-                className="hover:text-[#f59e0b] transition-colors flex items-center gap-1 font-semibold"
+                className="hover:text-[#f59e0b] transition-colors flex items-center gap-1.5 font-bold text-[#faf5ee]"
               >
-                <Phone className="w-3 h-3" /> {RESTAURANT_INFO.phone}
+                <Phone className="w-3 h-3 text-[#e67329]" /> {RESTAURANT_INFO.phone}
               </a>
             </div>
           </div>
@@ -92,47 +84,27 @@ export const Navbar: React.FC<NavbarProps> = ({
             ))}
           </div>
 
-          {/* Action Buttons */}
+          {/* Action Buttons: Just the phone number directly */}
           <div className="hidden sm:flex items-center gap-3">
-            {/* Bill / Table Plan Estimator Button */}
-            <button
-              onClick={onOpenBillEstimator}
-              className="relative flex items-center gap-2 px-3 py-2 text-xs font-semibold text-[#faf5ee] bg-[#241c16] hover:bg-[#33271f] border border-[#4a3a2d] rounded-lg transition-colors"
-              title="Table Order & Bill Estimator"
+            <a
+              href={`tel:${RESTAURANT_INFO.phone}`}
+              className="flex items-center gap-2.5 px-4 py-2 text-sm font-bold text-white bg-gradient-to-r from-[#c2410c] to-[#e67329] hover:from-[#b91c1c] hover:to-[#d97706] rounded-xl shadow-md hover:shadow-lg transition-all duration-200 transform hover:-translate-y-0.5"
             >
-              <Receipt className="w-4 h-4 text-[#f59e0b]" />
-              <span>Table Plan</span>
-              {cartCount > 0 && (
-                <span className="bg-[#e67329] text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center">
-                  {cartCount}
-                </span>
-              )}
-            </button>
-
-            {/* Book a Table Primary CTA */}
-            <button
-              onClick={onOpenReservation}
-              className="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-gradient-to-r from-[#c2410c] to-[#e67329] hover:from-[#b91c1c] hover:to-[#d97706] rounded-lg shadow-md hover:shadow-lg transition-all duration-200 transform hover:-translate-y-0.5 active:translate-y-0"
-            >
-              <Calendar className="w-4 h-4" />
-              <span>Book a Table</span>
-            </button>
+              <Phone className="w-4 h-4 text-[#faf5ee]" />
+              <span>{RESTAURANT_INFO.phone}</span>
+            </a>
           </div>
 
-          {/* Mobile Menu & Cart Toggle */}
+          {/* Mobile Direct Call & Menu Toggle */}
           <div className="flex items-center gap-2 lg:hidden">
-            <button
-              onClick={onOpenBillEstimator}
-              className="relative p-2 text-[#faf5ee] bg-[#241c16] rounded-lg border border-[#3d2f23]"
-              aria-label="Table order plan"
+            <a
+              href={`tel:${RESTAURANT_INFO.phone}`}
+              className="flex items-center gap-1.5 px-3 py-2 text-xs font-bold text-white bg-gradient-to-r from-[#c2410c] to-[#e67329] rounded-lg shadow"
+              aria-label={`Call ${RESTAURANT_INFO.phone}`}
             >
-              <Receipt className="w-5 h-5 text-[#f59e0b]" />
-              {cartCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-[#e67329] text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
-                  {cartCount}
-                </span>
-              )}
-            </button>
+              <Phone className="w-3.5 h-3.5" />
+              <span>{RESTAURANT_INFO.phone}</span>
+            </a>
 
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -161,20 +133,11 @@ export const Navbar: React.FC<NavbarProps> = ({
               ))}
 
               <div className="pt-3 border-t border-[#2e2319] flex flex-col gap-2.5">
-                <button
-                  onClick={() => {
-                    setMobileMenuOpen(false);
-                    onOpenReservation();
-                  }}
-                  className="w-full py-2.5 px-4 text-center font-semibold text-white bg-gradient-to-r from-[#c2410c] to-[#e67329] rounded-lg shadow"
-                >
-                  Book a Table at 286 Fox
-                </button>
                 <a
                   href={`tel:${RESTAURANT_INFO.phone}`}
-                  className="w-full py-2 px-4 text-center font-medium text-xs text-[#d1c2af] bg-[#221a14] border border-[#3a2c20] rounded-lg flex items-center justify-center gap-2"
+                  className="w-full py-3 px-4 text-center font-bold text-sm text-white bg-gradient-to-r from-[#c2410c] to-[#e67329] rounded-xl shadow flex items-center justify-center gap-2"
                 >
-                  <Phone className="w-3.5 h-3.5 text-[#f59e0b]" /> Call Restaurant ({RESTAURANT_INFO.phone})
+                  <Phone className="w-4 h-4" /> Call {RESTAURANT_INFO.phone}
                 </a>
               </div>
             </div>

@@ -137,7 +137,7 @@ export const LocationSection: React.FC = () => {
               {/* Telephone & Contact Quick Call */}
               <div className="flex items-center justify-between p-4 bg-[#211a13] border border-[#382b1e] rounded-2xl">
                 <div>
-                  <span className="text-[11px] text-[#8c7d6c]">Direct Reservations & Enquiries</span>
+                  <span className="text-[11px] text-[#8c7d6c]">Direct Call & Enquiries</span>
                   <p className="font-bold text-sm text-[#faf5ee]">{RESTAURANT_INFO.phone}</p>
                 </div>
                 <a

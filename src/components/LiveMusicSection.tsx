@@ -1,12 +1,37 @@
-import React, { useState } from 'react';
-import { LIVE_SCHEDULE } from '../data/restaurantData';
+import React, { useState, useEffect } from 'react';
+import { LIVE_SCHEDULE, RESTAURANT_INFO } from '../data/restaurantData';
 import { PataPataImages } from '../assets/images';
-import { Music, Calendar, Radio, ExternalLink, Disc, Sparkles } from 'lucide-react';
+import { Music, Calendar, Radio, ExternalLink, Disc, Sparkles, Camera, Phone } from 'lucide-react';
+import { loadStoredBandImage, loadStoredSongImage } from '../utils/photoStorage';
 
-export const LiveMusicSection: React.FC<{ onOpenReservation: () => void }> = ({
-  onOpenReservation,
+interface LiveMusicSectionProps {
+  bandVersion?: number;
+  songVersion?: number;
+}
+
+export const LiveMusicSection: React.FC<LiveMusicSectionProps> = ({
+  bandVersion = 0,
+  songVersion = 0,
 }) => {
   const [activeDay, setActiveDay] = useState<number>(1); // Friday by default
+  const [bandImage, setBandImage] = useState<string>(PataPataImages.band);
+  const [songBgImage, setSongBgImage] = useState<string>(PataPataImages.songBg || PataPataImages.band);
+
+  useEffect(() => {
+    const savedBand = loadStoredBandImage();
+    if (savedBand) {
+      setBandImage(savedBand);
+    } else {
+      setBandImage(PataPataImages.band);
+    }
+
+    const savedSong = loadStoredSongImage();
+    if (savedSong) {
+      setSongBgImage(savedSong);
+    } else {
+      setSongBgImage(PataPataImages.songBg || PataPataImages.band);
+    }
+  }, [bandVersion, songVersion]);
 
   return (
     <section id="live-jazz" className="py-20 bg-[#0d0b09] text-[#faf5ee] relative overflow-hidden">
@@ -32,20 +57,21 @@ export const LiveMusicSection: React.FC<{ onOpenReservation: () => void }> = ({
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch mb-16">
           {/* Left Column: Authentic Miriam Makeba "Pata Pata" Tribute Card */}
           <div className="lg:col-span-6 bg-[#16120e] rounded-3xl p-6 sm:p-8 border border-[#382b20] shadow-2xl relative overflow-hidden flex flex-col justify-between">
-            {/* Subtle background ambient texture */}
-            <div className="absolute inset-0 opacity-10 pointer-events-none">
+            {/* Customizable background of the "Song Behind Our Name" block (replaces the band background) */}
+            <div className="absolute inset-0 pointer-events-none overflow-hidden rounded-3xl">
               <img
-                src={PataPataImages.jazz}
-                alt="Live jazz band at Pata Pata"
-                className="w-full h-full object-cover"
+                src={songBgImage}
+                alt="Background of The Song Behind Our Name block"
+                className="w-full h-full object-cover opacity-25"
               />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#16120e] via-[#16120e]/85 to-[#16120e]/60" />
             </div>
 
             <div className="relative z-10 space-y-6">
               {/* Artwork & Header Header */}
               <div className="flex flex-col sm:flex-row items-center sm:items-start gap-5">
                 {/* Authentic painting of Miriam Makeba from the restaurant */}
-                <div className="relative shrink-0 group">
+                <div className="relative shrink-0">
                   <img
                     src={PataPataImages.miriamPainting}
                     alt="Authentic portrait painting of Miriam Makeba inside Pata Pata"
@@ -57,9 +83,11 @@ export const LiveMusicSection: React.FC<{ onOpenReservation: () => void }> = ({
                 </div>
 
                 <div className="flex-1 text-center sm:text-left">
-                  <div className="inline-flex items-center gap-1.5 text-[11px] font-sans uppercase tracking-widest text-[#e67329] font-bold mb-1">
-                    <Disc className="w-3.5 h-3.5 text-[#f59e0b]" />
-                    <span>The Song Behind Our Name</span>
+                  <div className="flex items-center justify-center sm:justify-start gap-2 mb-1">
+                    <div className="inline-flex items-center gap-1.5 text-[11px] font-sans uppercase tracking-widest text-[#e67329] font-bold">
+                      <Disc className="w-3.5 h-3.5 text-[#f59e0b]" />
+                      <span>The Song Behind Our Name</span>
+                    </div>
                   </div>
                   <h3 className="font-serif text-2xl font-bold text-[#faf5ee] mb-1">
                     “Pata Pata” (1967)
@@ -117,7 +145,7 @@ export const LiveMusicSection: React.FC<{ onOpenReservation: () => void }> = ({
             {/* Bottom note */}
             <div className="relative z-10 pt-4 mt-4 border-t border-[#261d15] flex items-center justify-between text-xs text-[#8c7d6c]">
               <span>Live acoustic & jazz bands weekly</span>
-              <span className="text-[#e67329] font-medium">Free with dining table</span>
+              <span className="text-[#e67329] font-medium">Free for dining patrons</span>
             </div>
           </div>
 
@@ -176,29 +204,31 @@ export const LiveMusicSection: React.FC<{ onOpenReservation: () => void }> = ({
               </div>
             </div>
 
-            {/* Quick table reservation for music nights */}
+            {/* Direct phone call for music sets */}
             <div className="pt-4 border-t border-[#261d15] flex flex-col sm:flex-row items-center justify-between gap-4">
               <span className="text-xs text-[#a69683]">
-                Weekend tables fill up fast for live sets. Booking strongly advised!
+                Weekend sets fill up early. Call us directly:
               </span>
-              <button
-                onClick={onOpenReservation}
-                className="w-full sm:w-auto px-5 py-2.5 bg-[#e67329] hover:bg-[#d97706] text-white text-xs font-bold rounded-xl shadow transition-colors whitespace-nowrap"
+              <a
+                href={`tel:${RESTAURANT_INFO.phone}`}
+                className="w-full sm:w-auto px-5 py-2.5 bg-[#e67329] hover:bg-[#d97706] text-white text-xs font-bold rounded-xl shadow transition-colors whitespace-nowrap flex items-center justify-center gap-1.5"
               >
-                Reserve Table for Live Music
-              </button>
+                <Phone className="w-3.5 h-3.5" />
+                <span>Call {RESTAURANT_INFO.phone}</span>
+              </a>
             </div>
           </div>
         </div>
 
         {/* Interior Live Jazz Photo Showcase */}
-        <div className="rounded-3xl overflow-hidden border border-[#382b20] relative h-64 sm:h-80 shadow-2xl">
+        <div className="rounded-3xl overflow-hidden border border-[#382b20] relative h-64 sm:h-80 shadow-2xl group">
           <img
-            src={PataPataImages.jazz}
+            src={bandImage}
             alt="Intimate jazz saxophonist and patrons at Pata Pata in Maboneng"
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover group-hover:scale-102 transition-transform duration-700"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#0d0b09] via-[#0d0b09]/50 to-transparent" />
+
           <div className="absolute bottom-6 left-6 right-6 flex flex-col sm:flex-row items-start sm:items-end justify-between gap-4">
             <div>
               <p className="text-xs uppercase tracking-widest text-[#f59e0b] font-semibold mb-1 font-sans">
@@ -208,12 +238,15 @@ export const LiveMusicSection: React.FC<{ onOpenReservation: () => void }> = ({
                 Where Every Meal Has A Soundtrack
               </h3>
             </div>
-            <button
-              onClick={onOpenReservation}
-              className="px-4 py-2 bg-[#1c1611]/90 border border-[#e67329]/50 hover:bg-[#e67329] text-white text-xs font-semibold rounded-xl backdrop-blur-sm transition-all"
-            >
-              Book Stage-Side Seating
-            </button>
+            <div className="flex items-center gap-2.5">
+              <a
+                href={`tel:${RESTAURANT_INFO.phone}`}
+                className="px-4 py-2 bg-[#1c1611]/90 border border-[#e67329]/50 hover:bg-[#e67329] text-white text-xs font-semibold rounded-xl backdrop-blur-sm transition-all flex items-center gap-1.5"
+              >
+                <Phone className="w-3.5 h-3.5 text-[#f59e0b]" />
+                <span>Call {RESTAURANT_INFO.phone}</span>
+              </a>
+            </div>
           </div>
         </div>
       </div>

@@ -1,19 +1,10 @@
 import React, { useState, useMemo } from 'react';
-import { MENU_ITEMS, MenuItem } from '../data/restaurantData';
+import { MENU_ITEMS } from '../data/restaurantData';
 import { PataPataImages } from '../assets/images';
-import { Flame, Leaf, Star, Search, Plus, Check, Receipt, Sparkles } from 'lucide-react';
+import { Flame, Leaf, Star, Search, Sparkles, Phone } from 'lucide-react';
+import { RESTAURANT_INFO } from '../data/restaurantData';
 
-interface MenuSectionProps {
-  onAddItem: (item: MenuItem) => void;
-  selectedItemsMap: { [id: string]: number };
-  onOpenBillEstimator: () => void;
-}
-
-export const MenuSection: React.FC<MenuSectionProps> = ({
-  onAddItem,
-  selectedItemsMap,
-  onOpenBillEstimator,
-}) => {
+export const MenuSection: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [filterPreference, setFilterPreference] = useState<'all' | 'popular' | 'spicy' | 'veg'>('all');
@@ -80,8 +71,6 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
     },
   ];
 
-  const totalSelectedCount = Object.values(selectedItemsMap).reduce((a, b) => a + b, 0);
-
   return (
     <section id="menu" className="py-20 bg-[#12100e] text-[#faf5ee] relative">
       {/* Decorative subtle texture */}
@@ -105,63 +94,38 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
 
         {/* Featured Visual Dish Highlights (4-Card Showcase) */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
-          {featuredHighlights.map((item) => {
-            const menuItem = MENU_ITEMS.find((m) => m.id === item.id);
-            const count = selectedItemsMap[item.id] || 0;
-            return (
-              <div
-                key={item.id}
-                className="group relative bg-[#1c1611] rounded-2xl overflow-hidden border border-[#382b20] hover:border-[#e67329]/60 shadow-xl transition-all duration-300 flex flex-col justify-between"
-              >
-                <div className="relative h-48 overflow-hidden">
-                  <img
-                    src={item.image}
-                    alt={item.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#1c1611] via-transparent to-transparent" />
-                  <span className="absolute top-3 left-3 text-[11px] font-sans font-semibold tracking-wider uppercase px-2.5 py-1 bg-[#12100e]/85 border border-[#e67329]/40 text-[#f59e0b] rounded-md backdrop-blur-sm">
-                    {item.tag}
-                  </span>
-                  <span className="absolute bottom-3 right-3 text-lg font-serif font-bold text-white bg-[#c2410c] px-3 py-0.5 rounded-lg shadow-md">
-                    {item.price}
-                  </span>
-                </div>
+          {featuredHighlights.map((item) => (
+            <div
+              key={item.id}
+              className="group relative bg-[#1c1611] rounded-2xl overflow-hidden border border-[#382b20] hover:border-[#e67329]/60 shadow-xl transition-all duration-300 flex flex-col justify-between"
+            >
+              <div className="relative h-48 overflow-hidden">
+                <img
+                  src={item.image}
+                  alt={item.title}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#1c1611] via-transparent to-transparent" />
+                <span className="absolute top-3 left-3 text-[11px] font-sans font-semibold tracking-wider uppercase px-2.5 py-1 bg-[#12100e]/85 border border-[#e67329]/40 text-[#f59e0b] rounded-md backdrop-blur-sm">
+                  {item.tag}
+                </span>
+                <span className="absolute bottom-3 right-3 text-lg font-serif font-bold text-white bg-[#c2410c] px-3 py-0.5 rounded-lg shadow-md">
+                  {item.price}
+                </span>
+              </div>
 
-                <div className="p-5 flex-1 flex flex-col justify-between">
-                  <div>
-                    <h3 className="font-serif text-lg font-bold text-[#faf5ee] mb-2 group-hover:text-[#f59e0b] transition-colors">
-                      {item.title}
-                    </h3>
-                    <p className="text-xs text-[#b8a996] leading-relaxed mb-4">
-                      {item.desc}
-                    </p>
-                  </div>
-
-                  {menuItem && (
-                    <button
-                      onClick={() => onAddItem(menuItem)}
-                      className={`w-full py-2 px-3 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors ${
-                        count > 0
-                          ? 'bg-[#e67329] text-white hover:bg-[#d97706]'
-                          : 'bg-[#2a2119] text-[#e8dccd] hover:bg-[#382b20] border border-[#483729]'
-                      }`}
-                    >
-                      {count > 0 ? (
-                        <>
-                          <Check className="w-3.5 h-3.5" /> Added ({count})
-                        </>
-                      ) : (
-                        <>
-                          <Plus className="w-3.5 h-3.5 text-[#f59e0b]" /> Add to Table Plan
-                        </>
-                      )}
-                    </button>
-                  )}
+              <div className="p-5 flex-1 flex flex-col justify-between">
+                <div>
+                  <h3 className="font-serif text-lg font-bold text-[#faf5ee] mb-2 group-hover:text-[#f59e0b] transition-colors">
+                    {item.title}
+                  </h3>
+                  <p className="text-xs text-[#b8a996] leading-relaxed">
+                    {item.desc}
+                  </p>
                 </div>
               </div>
-            );
-          })}
+            </div>
+          ))}
         </div>
 
         {/* Filter Controls & Search Bar */}
@@ -245,80 +209,57 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
 
         {/* Menu Items Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-          {filteredItems.map((item) => {
-            const count = selectedItemsMap[item.id] || 0;
-            return (
-              <div
-                key={item.id}
-                className="bg-[#18130e] border border-[#2b2118] hover:border-[#423326] p-5 rounded-2xl transition-all flex flex-col justify-between group"
-              >
-                <div>
-                  <div className="flex items-start justify-between gap-4 mb-2">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <h3 className="font-serif text-base sm:text-lg font-bold text-[#faf5ee] group-hover:text-[#f59e0b] transition-colors">
-                          {item.name}
-                        </h3>
-                        {item.tag && (
-                          <span className="text-[10px] uppercase font-sans tracking-wider text-[#e67329] font-medium">
-                            · {item.tag}
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                    <span className="font-serif text-lg font-bold text-[#f59e0b] whitespace-nowrap">
-                      R{item.price}
-                    </span>
-                  </div>
-
-                  <p className="text-xs sm:text-sm text-[#b0a08e] leading-relaxed mb-4">
-                    {item.description}
-                  </p>
-                </div>
-
-                <div className="flex items-center justify-between pt-3 border-t border-[#261d15] text-xs">
-                  {/* Dietary icons */}
-                  <div className="flex items-center gap-3 text-[#968673]">
+          {filteredItems.map((item) => (
+            <div
+              key={item.id}
+              className="bg-[#18130e] border border-[#2b2118] hover:border-[#e67329]/50 rounded-2xl p-5 transition-all shadow-md flex flex-col justify-between"
+            >
+              <div>
+                <div className="flex items-baseline justify-between gap-4 mb-2">
+                  <div className="flex items-center gap-2">
+                    <h3 className="font-serif text-lg font-bold text-[#faf5ee]">
+                      {item.name}
+                    </h3>
                     {item.isPopular && (
-                      <span className="flex items-center gap-1 text-[#f59e0b]">
-                        <Star className="w-3 h-3 fill-current" /> Loved by locals
-                      </span>
-                    )}
-                    {item.isSpicy && (
-                      <span className="flex items-center gap-1 text-[#e67329]">
-                        <Flame className="w-3 h-3" /> Peri-peri spice
-                      </span>
-                    )}
-                    {item.isVegetarian && (
-                      <span className="flex items-center gap-1 text-emerald-400">
-                        <Leaf className="w-3 h-3" /> Veg
+                      <span className="text-[10px] uppercase font-sans tracking-wide text-[#e67329] font-bold px-1.5 py-0.5 bg-[#e67329]/10 rounded border border-[#e67329]/30">
+                        Popular
                       </span>
                     )}
                   </div>
-
-                  {/* Add to plan button */}
-                  <button
-                    onClick={() => onAddItem(item)}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1 transition-colors ${
-                      count > 0
-                        ? 'bg-[#e67329] text-white'
-                        : 'bg-[#261c14] text-[#d4c5b3] hover:bg-[#382b20] border border-[#3d2e20]'
-                    }`}
-                  >
-                    {count > 0 ? (
-                      <>
-                        <Check className="w-3 h-3" /> In Plan ({count})
-                      </>
-                    ) : (
-                      <>
-                        <Plus className="w-3 h-3 text-[#f59e0b]" /> Add
-                      </>
-                    )}
-                  </button>
+                  <span className="font-serif font-bold text-lg text-[#f59e0b] whitespace-nowrap">
+                    R{item.price}
+                  </span>
                 </div>
+
+                <p className="text-xs text-[#b8a996] leading-relaxed mb-4">
+                  {item.description}
+                </p>
               </div>
-            );
-          })}
+
+              <div className="flex items-center justify-between pt-3 border-t border-[#231b14] text-xs">
+                <div className="flex items-center gap-3">
+                  {item.isSpicy && (
+                    <span className="flex items-center gap-1 text-[#e67329]">
+                      <Flame className="w-3 h-3" /> Spicy
+                    </span>
+                  )}
+                  {item.isVegetarian && (
+                    <span className="flex items-center gap-1 text-emerald-400">
+                      <Leaf className="w-3 h-3" /> Veg
+                    </span>
+                  )}
+                </div>
+
+                <a
+                  href={`tel:${RESTAURANT_INFO.phone}`}
+                  className="px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 text-[#d4c5b3] hover:text-[#f59e0b] bg-[#261c14] hover:bg-[#382b20] border border-[#3d2e20] transition-colors"
+                >
+                  <Phone className="w-3 h-3 text-[#e67329]" />
+                  <span>Call to Order: {RESTAURANT_INFO.phone}</span>
+                </a>
+              </div>
+            </div>
+          ))}
         </div>
 
         {filteredItems.length === 0 && (
@@ -333,32 +274,6 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
               className="text-xs text-[#f59e0b] underline font-medium"
             >
               Reset all menu filters
-            </button>
-          </div>
-        )}
-
-        {/* Floating Table Plan Estimator Strip if user has added dishes */}
-        {totalSelectedCount > 0 && (
-          <div className="mt-12 sticky bottom-4 z-30 max-w-xl mx-auto bg-gradient-to-r from-[#201811] to-[#291f16] border border-[#e67329]/60 rounded-2xl p-4 shadow-2xl backdrop-blur-md flex items-center justify-between gap-4">
-            <div className="flex items-center gap-3">
-              <div className="p-2.5 bg-[#e67329] text-white rounded-xl">
-                <Receipt className="w-5 h-5" />
-              </div>
-              <div>
-                <p className="text-xs font-semibold text-[#faf5ee]">
-                  {totalSelectedCount} {totalSelectedCount === 1 ? 'dish' : 'dishes'} in your Table Plan
-                </p>
-                <p className="text-[11px] text-[#b5a592]">
-                  Review estimated cost, split among guests & share
-                </p>
-              </div>
-            </div>
-
-            <button
-              onClick={onOpenBillEstimator}
-              className="px-4 py-2 bg-gradient-to-r from-[#c2410c] to-[#e67329] text-white text-xs font-bold rounded-xl shadow-md hover:brightness-110 whitespace-nowrap"
-            >
-              View Table Plan
             </button>
           </div>
         )}

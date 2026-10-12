@@ -14,7 +14,7 @@ const TikTokIcon: React.FC<{ className?: string }> = ({ className = 'w-4 h-4' })
   </svg>
 );
 
-export const Footer: React.FC<{ onOpenReservation: () => void }> = ({ onOpenReservation }) => {
+export const Footer: React.FC = () => {
   return (
     <footer className="bg-[#090807] text-[#a89986] border-t border-[#261d15] pt-16 pb-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -100,12 +100,13 @@ export const Footer: React.FC<{ onOpenReservation: () => void }> = ({ onOpenRese
                 </a>
               </li>
               <li>
-                <button
-                  onClick={onOpenReservation}
-                  className="text-[#e67329] hover:underline font-semibold text-left"
+                <a
+                  href={`tel:${RESTAURANT_INFO.phone}`}
+                  className="text-[#e67329] hover:underline font-semibold text-left flex items-center gap-1"
                 >
-                  Book a Table
-                </button>
+                  <Phone className="w-3 h-3" />
+                  <span>Call {RESTAURANT_INFO.phone}</span>
+                </a>
               </li>
             </ul>
           </div>

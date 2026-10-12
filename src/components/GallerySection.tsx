@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { PataPataImages } from '../assets/images';
 import { RESTAURANT_INFO } from '../data/restaurantData';
-import { Eye, X, Camera, Sparkles, ExternalLink, Instagram } from 'lucide-react';
+import { Eye, X, Camera, ExternalLink, Instagram } from 'lucide-react';
+import { loadStoredBandImage, loadStoredAlfrescoImage } from '../utils/photoStorage';
 
 interface GalleryItem {
   id: string;
@@ -11,8 +12,36 @@ interface GalleryItem {
   desc: string;
 }
 
-export const GallerySection: React.FC = () => {
+interface GallerySectionProps {
+  bandVersion?: number;
+  alfrescoVersion?: number;
+}
+
+export const GallerySection: React.FC<GallerySectionProps> = ({
+  bandVersion = 0,
+  alfrescoVersion = 0,
+}) => {
   const [activePhoto, setActivePhoto] = useState<GalleryItem | null>(null);
+  const [alfrescoImage, setAlfrescoImage] = useState<string>(PataPataImages.alfresco);
+  const [bandImage, setBandImage] = useState<string>(PataPataImages.band);
+
+  useEffect(() => {
+    const saved = loadStoredAlfrescoImage();
+    if (saved) {
+      setAlfrescoImage(saved);
+    } else {
+      setAlfrescoImage(PataPataImages.alfresco);
+    }
+  }, [alfrescoVersion]);
+
+  useEffect(() => {
+    const saved = loadStoredBandImage();
+    if (saved) {
+      setBandImage(saved);
+    } else {
+      setBandImage(PataPataImages.band);
+    }
+  }, [bandVersion]);
 
   const galleryItems: GalleryItem[] = [
     {
@@ -24,7 +53,7 @@ export const GallerySection: React.FC = () => {
     },
     {
       id: 'g-2',
-      image: PataPataImages.hero,
+      image: alfrescoImage,
       title: 'Twilight on Fox Street',
       category: 'Alfresco Sidewalk Dining',
       desc: 'Diners laughing under string lights as the artistic energy of Maboneng comes alive around 286 Fox Street.',
@@ -38,7 +67,7 @@ export const GallerySection: React.FC = () => {
     },
     {
       id: 'g-4',
-      image: PataPataImages.jazz,
+      image: bandImage,
       title: 'Live Afro-Jazz & Soul',
       category: 'Sophiatown Stage',
       desc: 'The heart and rhythm of Joburg: live brass, upright bass, and soulful melodies inside our vintage haven.',
