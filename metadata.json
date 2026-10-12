@@ -1,0 +1,6 @@
+{
+  "name": "Pata Pata - African Cuisine & Live Jazz",
+  "description": "The soul of Maboneng: authentic South African cuisine, sizzling grills, signature cocktails, and vibrant live jazz at 286 Fox Street, Johannesburg.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

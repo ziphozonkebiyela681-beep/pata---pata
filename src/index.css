@@ -1,0 +1,48 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --font-serif: "Fraunces", Georgia, serif;
+    --font-display: "Syne", sans-serif;
+    --font-sans: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+    --font-bebas: "Bebas Neue", sans-serif;
+  }
+}
+
+.font-serif {
+  font-family: var(--font-serif);
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+.font-sans {
+  font-family: var(--font-sans);
+}
+
+.font-bebas {
+  font-family: var(--font-bebas);
+}
+
+/* Custom subtle noise texture for authentic vintage vinyl feel */
+.bg-grain {
+  background-image: radial-gradient(rgba(230, 115, 41, 0.04) 1px, transparent 0);
+  background-size: 24px 24px;
+}
+
+/* Smooth custom scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #0f0e0c;
+}
+::-webkit-scrollbar-thumb {
+  background: #2e2822;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #d97706;
+}
